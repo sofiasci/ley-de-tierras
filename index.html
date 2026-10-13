@@ -40,6 +40,7 @@ const CONFIG = {
     "emfernandez@hcdn.gob.ar",
     "gmedina@hcdn.gob.ar",
     "mnoguera@hcdn.gob.ar",
+    "sofia.scirica@gmail.com",
   ],
 
   SUBJECT: "DNU 70/2023: le pido que esté en su banca el 15 de octubre",
@@ -65,6 +66,17 @@ Le pido que esté en su banca y vote para recuperar los límites. Voy a estar at
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+  /* Fuente propia: subí estos .ttf al repo, junto al index.html */
+  @font-face{
+    font-family:"Alte Haas Grotesk";
+    src:url("AlteHaasGroteskBold.ttf") format("truetype");
+    font-weight:700;font-style:normal;font-display:swap;
+  }
+  @font-face{
+    font-family:"Alte Haas Grotesk";
+    src:url("AlteHaasGroteskRegular.ttf") format("truetype");
+    font-weight:400;font-style:normal;font-display:swap;
+  }
   :root{
     --bg:#F1F4EF; --ink:#10261C; --pine:#11513A; --pine-deep:#0C3A29;
     --signal:#CDEB45; --signal-deep:#b9d82f; --muted:#5E6B63;
@@ -82,7 +94,7 @@ Le pido que esté en su banca y vote para recuperar los límites. Voy a estar at
     display:flex;align-items:center;gap:.5rem}
   .mark::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--signal);
     box-shadow:0 0 0 4px rgba(205,235,69,.25)}
-  h1{font-family:Archivo,sans-serif;font-weight:800;line-height:1.02;
+  h1{font-family:"Alte Haas Grotesk",Archivo,sans-serif;font-weight:700;line-height:1.02;
     font-size:clamp(2.4rem,8vw,4rem);margin:1.6rem 0 0;letter-spacing:-.02em}
   h1 em{font-style:normal;color:var(--pine);display:block}
   .lede{font-size:clamp(1.05rem,2.4vw,1.25rem);color:var(--muted);max-width:48ch;margin:1.1rem 0 0}
@@ -148,7 +160,7 @@ Le pido que esté en su banca y vote para recuperar los límites. Voy a estar at
 <main class="wrap">
   <p class="mark">Jóvenes por el Clima · Acción</p>
 
-  <h1>Sumá tu voz.<em>Defende las tierras argentinas.</em></h1>
+  <h1>Sumá tu voz.<em>Multiplicá el reclamo.</em></h1>
   <p class="lede">Escribí tu nombre y abrí tu correo con el mensaje ya cargado.
     Lo enviás vos, desde tu casilla, a toda la lista. Cuantas más personas lo mandan, más fuerte llega.</p>
 
