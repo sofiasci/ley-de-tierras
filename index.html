@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sumá tu voz — JOCA</title>
+
+<!-- =====================================================================
+     CONFIGURACIÓN  ·  editá SOLO este bloque
+     =====================================================================
+     1) GOOGLE_CLIENT_ID  → lo sacás de Google Cloud Console (ver README)
+     2) RECIPIENTS        → la lista de destinatarios (a quién le llega)
+     3) SUBJECT / BODY    → el correo que cada emisor va a mandar
+     4) SEND_MODE         → "individual" (un mail por destinatario, cada uno
+                            lo recibe directo) o "bcc" (un solo mail con todos
+                            en copia oculta; más rápido y no gasta tanta cuota)
+===================================================================== -->
+<script>
+const CONFIG = {
+  GOOGLE_CLIENT_ID: "PEGÁ-ACÁ-TU-CLIENT-ID.apps.googleusercontent.com",
+
+  // Cada destinatario con su nombre: con eso se completa el {DIPUTADO} del saludo.
+  RECIPIENTS: [
+    { name: "Nombre Apellido", email: "diputado1@hcdn.gob.ar" },
+    { name: "Nombre Apellido", email: "diputado2@hcdn.gob.ar" },
+    { name: "Nombre Apellido", email: "diputado3@hcdn.gob.ar" },
+  ],
+
+  SUBJECT: "DNU 70/2023: le pido que esté en su banca el 15 de octubre",
+
+  // Tokens disponibles: {DIPUTADO} = nombre del destinatario · {EMISOR} = tu nombre de Google
+  BODY:
+`Diputado/a {DIPUTADO}:
+
+Me llamo {EMISOR}, y vivo en el país que le eligió para defenderlo.
+
+Desde el 29 de septiembre no hay ningún límite nacional a la compra de tierras rurales por extranjeros. Eso incluye campos con ríos y lagos y tierras en zonas de frontera.
+
+El Senado ya rechazó el DNU 70/2023. Falta Diputados. El 15 de octubre a las 14 está pedida la sesión.
+
+Le pido que esté en su banca y vote para recuperar los límites. Voy a estar atento/a a su voto.
+
+{EMISOR}
+`,
+
+  // Con saludo personalizado tiene que ser "individual" (un correo por destinatario).
+  // "bcc" no puede completar el nombre de cada diputado/a.
+  SEND_MODE: "individual",
+
+  // Nombre que aparece como remitente (opcional). La casilla sigue siendo
+  // la de quien se conecta; esto solo cambia el nombre visible.
+  FROM_NAME: "",
+
+  // Pausa entre envíos en modo "individual" (ms). No lo bajes mucho:
+  // evita que Gmail te marque como envío masivo.
+  DELAY_MS: 1200,
+};
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F1F4EF; --ink:#10261C; --pine:#11513A; --pine-deep:#0C3A29;
+    --signal:#CDEB45; --signal-deep:#b9d82f; --muted:#5E6B63;
+    --line:#D6DDD3; --card:#FBFCFA; --danger:#B23A24; --ok:#2C7A4B;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html{scroll-padding-top:env(safe-area-inset-top,0px)}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:Inter,system-ui,sans-serif;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:clamp(1.5rem,5vw,4rem) clamp(1.2rem,5vw,2rem)}
+
+  /* ---- hero ---- */
+  .mark{font-family:Archivo,sans-serif;font-weight:700;font-size:.9rem;
+    letter-spacing:.01em;color:var(--pine);display:flex;align-items:center;gap:.5rem}
+  .mark::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--signal);
+    box-shadow:0 0 0 4px rgba(205,235,69,.25)}
+  h1{font-family:Archivo,sans-serif;font-weight:800;line-height:1.02;
+    font-size:clamp(2.4rem,8vw,4rem);margin:1.6rem 0 0;letter-spacing:-.02em}
+  h1 em{font-style:normal;color:var(--pine);display:block}
+  .lede{font-size:clamp(1.05rem,2.4vw,1.25rem);color:var(--muted);
+    max-width:46ch;margin:1.1rem 0 0}
+
+  /* ---- steps ---- */
+  .steps{margin:2.6rem 0;padding:0;list-style:none;display:grid;gap:.1rem;
+    border-top:1px solid var(--line)}
+  .steps li{display:grid;grid-template-columns:2.2rem 1fr;gap:1rem;align-items:baseline;
+    padding:1.1rem .2rem;border-bottom:1px solid var(--line)}
+  .steps b{font-family:Archivo,sans-serif;font-weight:800;font-size:1.3rem;color:var(--pine)}
+  .steps span{color:var(--ink)}
+  .steps small{color:var(--muted);display:block;margin-top:.15rem;font-size:.92rem}
+
+  /* ---- action card ---- */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:clamp(1.3rem,4vw,2rem);margin-top:1rem}
+  .chip{display:inline-flex;align-items:center;gap:.5rem;background:var(--pine);
+    color:#fff;font-weight:600;font-size:.9rem;border-radius:999px;padding:.35rem .9rem}
+  .chip b{font-family:Archivo,sans-serif;font-weight:800}
+
+  .preview{margin:1.2rem 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .preview summary{cursor:pointer;padding:.85rem 1rem;font-weight:600;background:#fff;
+    list-style:none;display:flex;justify-content:space-between;align-items:center}
+  .preview summary::after{content:"ver";color:var(--muted);font-weight:500;font-size:.9rem}
+  .preview[open] summary::after{content:"ocultar"}
+  .preview .inner{padding:1rem;border-top:1px solid var(--line);background:#fff}
+  .preview .subject{font-weight:600;margin:0 0 .5rem}
+  .preview pre{font-family:Inter,sans-serif;white-space:pre-wrap;margin:0;color:var(--ink);font-size:.95rem}
+
+  .cta{width:100%;border:none;cursor:pointer;font-family:Archivo,sans-serif;font-weight:800;
+    font-size:1.1rem;color:var(--pine-deep);background:var(--signal);border-radius:12px;
+    padding:1.05rem 1.2rem;transition:background .15s,transform .05s;display:flex;
+    align-items:center;justify-content:center;gap:.6rem}
+  .cta:hover{background:var(--signal-deep)}
+  .cta:active{transform:translateY(1px)}
+  .cta:disabled{background:#E3E8DF;color:var(--muted);cursor:not-allowed}
+  .cta svg{width:20px;height:20px}
+
+  .who{margin:.8rem 0 0;font-size:.9rem;color:var(--muted);text-align:center}
+  .who b{color:var(--ink)}
+
+  /* ---- progress ---- */
+  .progress{margin-top:1.2rem;display:none}
+  .progress.on{display:block}
+  .bar{height:10px;background:#E3E8DF;border-radius:999px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--pine);
+    transition:width .3s ease}
+  .pstat{margin-top:.6rem;font-size:.95rem;color:var(--muted)}
+  .result{margin-top:1rem;font-size:.95rem;display:none}
+  .result.on{display:block}
+  .result .ok{color:var(--ok);font-weight:600}
+  .result .err{color:var(--danger);font-weight:600}
+  .errlist{margin:.6rem 0 0;padding:.8rem 1rem;background:#FBEEEA;border-radius:10px;
+    font-size:.88rem;color:#7a2a18}
+  .errlist ul{margin:.3rem 0 0;padding-left:1.1rem}
+
+  .note{margin-top:2.5rem;font-size:.85rem;color:var(--muted);border-top:1px solid var(--line);
+    padding-top:1.2rem}
+  .warn{background:#FFF7E0;border:1px solid #EAD9A0;color:#6b5412;border-radius:12px;
+    padding:.9rem 1rem;font-size:.9rem;margin:1rem 0;display:none}
+  .warn.on{display:block}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <p class="mark">Jóvenes por el Clima · Acción</p>
+
+  <h1>Sumá tu voz.<em>Multiplicá el reclamo.</em></h1>
+  <p class="lede">Conectá tu correo de Google y el mismo mensaje sale desde tu casilla
+    hacia toda la lista. Cuantas más personas lo mandan, más fuerte llega.</p>
+
+  <ol class="steps">
+    <li><b>1</b><span>Conectás tu Google
+      <small>Autorizás solo el permiso de enviar correos. Nadie accede a tu bandeja.</small></span></li>
+    <li><b>2</b><span>Revisás el mensaje
+      <small>Lleva tu nombre y el de cada diputado/a. Podés leerlo completo antes de mandarlo.</small></span></li>
+    <li><b>3</b><span>Se envía desde tu casilla
+      <small>Llega a cada destinatario como un correo tuyo, no de un servicio raro.</small></span></li>
+  </ol>
+
+  <div class="card">
+    <span class="chip">Le llega a <b id="count">0</b>&nbsp;destinatarios</span>
+
+    <details class="preview">
+      <summary>Mirá qué vas a enviar</summary>
+      <div class="inner">
+        <p class="subject" id="pvSubject"></p>
+        <pre id="pvBody"></pre>
+      </div>
+    </details>
+
+    <div class="warn" id="configWarn">
+      ⚠️ Falta configurar el <b>GOOGLE_CLIENT_ID</b> en el archivo. Mientras tanto el botón está desactivado.
+    </div>
+
+    <button class="cta" id="send">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/></svg>
+      Conectar Google y enviar
+    </button>
+    <p class="who" id="who"></p>
+
+    <div class="progress" id="progress">
+      <div class="bar"><i id="barfill"></i></div>
+      <p class="pstat" id="pstat">Enviando…</p>
+    </div>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <p class="note">Esta herramienta envía desde <b>tu propia cuenta</b>, con tu permiso explícito.
+    Usala para contactar a personas que corresponde contactar (funcionarios, representantes,
+    destinatarios de la campaña). No sirve para mandar correo no deseado.</p>
+</main>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+/* ---------- helpers de codificación (UTF-8 → base64 / base64url) ---------- */
+function b64(bytes){let s="";for(let i=0;i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);return btoa(s);}
+function utf8(str){return new TextEncoder().encode(str);}
+function b64utf8(str){return b64(utf8(str));}
+function base64url(str){
+  const bytes=utf8(str);let s="";for(let i=0;i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);
+  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function chunk76(s){return s.replace(/(.{76})/g,"$1\r\n");}
+function encodedWord(subject){return "=?UTF-8?B?"+b64utf8(subject)+"?=";}
+function fillTemplate(t,{receptor,emisor}){
+  return t.replace(/\{DIPUTADO\}/g,receptor||"").replace(/\{EMISOR\}/g,emisor||"");
+}
+
+/* ---------- construcción del mensaje MIME ---------- */
+function buildMime({fromName, fromEmail, to, bcc, subject, body}){
+  const fromHeader = fromName ? `${encodedWord(fromName)} <${fromEmail}>` : fromEmail;
+  const lines = [
+    `From: ${fromHeader}`,
+    to  ? `To: ${to}`   : `To: ${fromEmail}`,            // en modo bcc, To: vos mismo
+    bcc ? `Bcc: ${bcc}` : null,
+    `Subject: ${encodedWord(subject)}`,
+    "MIME-Version: 1.0",
+    'Content-Type: text/plain; charset="UTF-8"',
+    "Content-Transfer-Encoding: base64",
+    "",
+    chunk76(b64utf8(body)),
+  ].filter(Boolean).join("\r\n");
+  return base64url(lines);
+}
+
+/* ---------- envío vía Gmail API ---------- */
+async function gmailSend(token, raw){
+  const res = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send",{
+    method:"POST",
+    headers:{Authorization:"Bearer "+token,"Content-Type":"application/json"},
+    body:JSON.stringify({raw}),
+  });
+  if(!res.ok){
+    let msg = res.status+"";
+    try{const e=await res.json();msg=e.error?.message||msg;}catch{}
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+async function getProfile(token){
+  try{
+    const r=await fetch("https://www.googleapis.com/oauth2/v3/userinfo",
+      {headers:{Authorization:"Bearer "+token}});
+    const j=await r.json();return {email:j.email||"",name:j.name||""};
+  }catch{return {email:"",name:""};}
+}
+
+/* ---------- UI ---------- */
+const $=id=>document.getElementById(id);
+const sendBtn=$("send");
+let sending=false, tokenClient=null;
+
+function init(){
+  $("count").textContent=CONFIG.RECIPIENTS.length;
+  $("pvSubject").textContent=CONFIG.SUBJECT;
+  $("pvBody").textContent=fillTemplate(CONFIG.BODY,{receptor:"[nombre del diputado/a]",emisor:"[tu nombre]"});
+
+  const configured = CONFIG.GOOGLE_CLIENT_ID && !CONFIG.GOOGLE_CLIENT_ID.startsWith("PEGÁ");
+  if(!configured){ $("configWarn").classList.add("on"); sendBtn.disabled=true; }
+
+  if(window.google && google.accounts && configured){
+    tokenClient = google.accounts.oauth2.initTokenClient({
+      client_id: CONFIG.GOOGLE_CLIENT_ID,
+      scope: "https://www.googleapis.com/auth/gmail.send email profile",
+      callback: onToken,
+    });
+  }
+  // marca blanda para avisar si ya enviaste desde esta compu
+  try{
+    const prev=localStorage.getItem("joca_sent_at");
+    if(prev){ $("who").innerHTML=`Ya enviaste desde este navegador el <b>${new Date(+prev).toLocaleDateString("es-AR")}</b>. Podés volver a hacerlo si querés.`; }
+  }catch{}
+}
+
+sendBtn.addEventListener("click",()=>{
+  if(sending||!tokenClient)return;
+  tokenClient.requestAccessToken();   // abre el OAuth de Google
+});
+
+async function onToken(resp){
+  if(resp.error){ showResult(false,"No se pudo autorizar: "+resp.error); return; }
+  const token=resp.access_token;
+  sending=true; sendBtn.disabled=true; sendBtn.textContent="Enviando…";
+
+  const {email:fromEmail,name:fromName}=await getProfile(token);
+  const senderName=fromName||CONFIG.FROM_NAME||fromEmail;
+  $("who").innerHTML=fromEmail?`Enviando como <b>${senderName}</b> (${fromEmail})`:"";
+
+  $("progress").classList.add("on");
+  $("result").classList.remove("on");
+
+  const recipients=CONFIG.RECIPIENTS;
+  const errors=[];
+  let done=0;
+
+  const tick=(label)=>{
+    const total = CONFIG.SEND_MODE==="bcc" ? 1 : recipients.length;
+    $("barfill").style.width=Math.round(done/total*100)+"%";
+    $("pstat").textContent=label;
+  };
+
+  try{
+    if(CONFIG.SEND_MODE==="bcc"){
+      tick("Preparando el envío…");
+      const raw=buildMime({
+        fromName:senderName,fromEmail,
+        bcc:recipients.map(r=>r.email).join(", "),
+        subject:CONFIG.SUBJECT,
+        body:fillTemplate(CONFIG.BODY,{receptor:"",emisor:senderName}),
+      });
+      await gmailSend(token,raw);
+      done=1; tick("Listo");
+    }else{
+      for(let i=0;i<recipients.length;i++){
+        const r=recipients[i];
+        tick(`Enviando ${i+1} de ${recipients.length}…`);
+        try{
+          const toHeader = r.name ? `${encodedWord(r.name)} <${r.email}>` : r.email;
+          const body=fillTemplate(CONFIG.BODY,{receptor:r.name,emisor:senderName});
+          const raw=buildMime({fromName:senderName,fromEmail,to:toHeader,subject:CONFIG.SUBJECT,body});
+          await gmailSend(token,raw);
+        }catch(e){ errors.push({to:r.email,msg:e.message}); }
+        done=i+1; tick(`Enviando ${done} de ${recipients.length}…`);
+        if(i<recipients.length-1) await new Promise(r=>setTimeout(r,CONFIG.DELAY_MS));
+      }
+    }
+    try{localStorage.setItem("joca_sent_at",Date.now()+"");}catch{}
+    const total=CONFIG.SEND_MODE==="bcc"?recipients.length:recipients.length;
+    const okCount=total-errors.length;
+    showResult(errors.length===0,okCount,total,errors);
+  }catch(e){
+    showResult(false,"Falló el envío: "+e.message);
+  }finally{
+    sending=false; sendBtn.disabled=false;
+    sendBtn.textContent="Enviar de nuevo";
+    $("pstat").textContent="Finalizado";
+  }
+}
+
+function showResult(ok, a, total, errors){
+  const box=$("result"); box.classList.add("on");
+  if(typeof a==="string"){ box.innerHTML=`<span class="err">${a}</span>`; return; }
+  let html=`<span class="${ok?"ok":"err"}">${ok?"✓":"⚠"} ${a} de ${total} enviados correctamente.</span>`;
+  if(errors && errors.length){
+    html+=`<div class="errlist">No salieron ${errors.length}:<ul>`+
+      errors.map(e=>`<li>${e.to} — ${e.msg}</li>`).join("")+`</ul>`+
+      `Suele ser cuota diaria de Gmail o una dirección mal escrita.</div>`;
+  }
+  box.innerHTML=html;
+}
+
+window.addEventListener("load",()=>setTimeout(init,300));
+</script>
+</body>
+</html>
