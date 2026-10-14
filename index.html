@@ -65,8 +65,8 @@ Le pido que esté en su banca y vote para recuperar los límites. Voy a estar at
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&family=Libre+Baskerville:ital@1&display=swap" rel="stylesheet">
 
 <style>
-  /* Fuente propia: subí estos .ttf al repo, junto al index.html */
-  @font-face{
+  /* Fuente propia: subí estos .ttf al repo, junto al index.html */  
+@font-face{
     font-family:"Alte Haas Grotesk";
     src:url("AlteHaasGroteskBold.ttf") format("truetype");
     font-weight:700;font-style:normal;font-display:swap;
@@ -89,10 +89,13 @@ Le pido que esté en su banca y vote para recuperar los límites. Voy a estar at
     font-family:Inter,system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
   .wrap{max-width:720px;margin:0 auto;padding:clamp(1.5rem,5vw,4rem) clamp(1.2rem,5vw,2rem)}
 
-  .mark{font-family:"Libre Baskerville",serif;font-style:italic;font-weight:400;font-size:1rem;color:var(--pine);
+  .top .mark{margin:0}
+.mark{font-family:"Libre Baskerville",serif;font-style:italic;font-weight:400;font-size:1rem;color:var(--pine);
     display:flex;align-items:center;gap:.5rem}
   .mark::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--signal);
     box-shadow:0 0 0 4px rgba(205,235,69,.25)}
+     .top{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+  .logo{width:clamp(56px,12vw,80px);height:auto;flex-shrink:0;display:block}
   h1{font-family:"Alte Haas Grotesk",Archivo,sans-serif;font-weight:700;line-height:1.02;
     font-size:clamp(2.4rem,8vw,4rem);margin:1.6rem 0 0;letter-spacing:-.02em}
   h1 em{font-style:normal;color:var(--pine);display:block}
@@ -157,8 +160,11 @@ Le pido que esté en su banca y vote para recuperar los límites. Voy a estar at
 </head>
 <body>
 <main class="wrap">
-  <p class="mark">Jóvenes por el Clima · Acción</p>
-
+  <header class="top">
+    <p class="mark">Jóvenes por el Clima · Acción</p>
+    <img class="logo" alt="Jóvenes por el Clima" src="data:image/png;base64,…">
+  </header>
+     
   <h1>Sumá tu voz.<em>Defendé las tierras argentinas.</em></h1>
   <p class="lede">Escribí tu nombre y abrí tu correo con el mensaje dirigido a los diputados pidiendo que no entreguen nuestras tierras.
     Lo enviás vos, desde tu casilla, a toda la lista. Cuantas más personas lo mandan, más fuerte es el mensaje.</p>
